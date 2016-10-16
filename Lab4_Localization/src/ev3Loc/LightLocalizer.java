@@ -1,13 +1,15 @@
 package ev3Loc;
+import lejos.hardware.Button;
 import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
 
 public class LightLocalizer {
 	private Odometer odo;
 	private SampleProvider colorSensor;
 	private float[] colorData;	
 	public Navigation nav;
-	private float Rot_Speed = 120;
-	private double distSensor = 11.2;//Distance from the center of rotation to the sensor
+	private float Rot_Speed = 60;
+	private double distSensor = 15.5;//Distance from the center of rotation to the sensor
 	
 	public LightLocalizer(Odometer odo, SampleProvider colorSensor, float[] colorData) {
 		this.odo = odo;
@@ -25,45 +27,75 @@ public class LightLocalizer {
 		
 		double angle [] = new double [4];
 		
-		int gridLines = 0;
+		
 		double x,y;
+		float intensity;
+		colorSensor.fetchSample(colorData, 0);
 		
-		float intensity, prev, delta;
 		
-		prev = colorData[0];
-		
-		while (gridLines < 4){
+		while(Button.waitForAnyPress() != Button.ID_ESCAPE){}
+		boolean cont = false;
+		nav.turnTo(45,true);
+		while(true){
 			
-			nav.setSpeeds(Rot_Speed, Rot_Speed);
+			
+			nav.setSpeeds(100,100);
+			
+			colorSensor.fetchSample(colorData, 0);
 			intensity = colorData[0];
-			delta = intensity - prev;
 			
-			if (Math.abs(delta) > 0.1){
+			if (intensity  < 0.60){
 				
-				if (delta > 0){
-					
-					angle [gridLines++] = odo.getAng();
-					
-				}
+				//cont = true;
+				break;
 				
 			}
-			prev = intensity;
+			
 			
 		}
+		
+		nav.setSpeeds(0,0);
+		
+		nav.setSpeeds(-100,-100);
+		Delay.msDelay(4000);
+		
+		int gridLines = 0;
+		
+		while (gridLines < 4 ){
+			
+			colorSensor.fetchSample(colorData, 0);
+			nav.setSpeeds(Rot_Speed, -Rot_Speed);
+			intensity = colorData[0];
+			
+			
+			if (intensity > 0.60){
+				
+				cont = true;
+			}
+			
+			if (intensity  < 0.60 && cont){
+		
+				angle [gridLines] = odo.getAng();
+				gridLines++;
+				if (gridLines < 4)
+				{
+					Delay.msDelay(750);
+				}
+				cont = false;
+				
+			}
+			
+		}
+		nav.setSpeeds(0, 0);
 		
 		x = Math.abs(angle[2] - angle[0]);
 	    y = Math.abs(angle[3] - angle[1]);
-		double xpos = -distSensor * Math.cos(y / 2);
-		double ypos = -distSensor * Math.cos(x / 2);
-		double dtheta = 90-(ypos-180)+((ypos)/2);
-		odo.setPosition(new double [] {xpos, ypos, dtheta}, new boolean [] {true, true, true});
-		try{
-			Thread.sleep(2000);
-			
-		}
-		catch(Exception e){
-			
-		}
+		double xpos = -distSensor * Math.cos(Math.toRadians(y) / 2);
+		double ypos = -distSensor * Math.cos(Math.toRadians(x) / 2);
+		double dtheta = -(angle[3]-180)-((y)/2);
+		odo.setPosition(new double [] {xpos, ypos, odo.getAng() + dtheta}, new boolean [] {true, true, true});
+		
+		
 		
 		nav.travelTo(0, 0);
 		nav.turnTo(0, true);

@@ -35,7 +35,7 @@ public class USLocalizer {
 			
 			while(getFilteredData() < LEEWAY){
 				
-				leftTurn();
+				rightTurn();
 				//System.out.println("running1");
 			}
 			
@@ -44,7 +44,7 @@ public class USLocalizer {
 			
 			while (getFilteredData() >= LEEWAY){
 				
-				leftTurn();
+				rightTurn();
 				//System.out.println("running2");
 				
 			}
@@ -56,7 +56,7 @@ public class USLocalizer {
 			
 			while(getFilteredData() < LEEWAY){
 				
-				rightTurn();
+				leftTurn();
 				//System.out.println("running3");
 			}
 			Delay.msDelay(1000);
@@ -66,11 +66,11 @@ public class USLocalizer {
 			
 			while (getFilteredData() >= LEEWAY){
 				
-				rightTurn();
+				leftTurn();
 				//System.out.println("running4");
 				
 			}
-			System.out.println("DONE!!!");
+			
 			nav.setSpeeds(0, 0);
 			angleB = odo.getAng();
 			Delay.msDelay(1000);
@@ -82,8 +82,8 @@ public class USLocalizer {
 			actualAng = calcHeading(angleA,angleB) + odo.getAng();
 			// update the odometer position (example to follow:)
 			odo.setPosition(new double [] {0.0, 0.0, actualAng}, new boolean [] {true, true, true});
-			nav.setSpeeds(ROTATION_SPEED, ROTATION_SPEED);
-			//nav.turnTo(0, true);
+			//nav.setSpeeds(ROTATION_SPEED, ROTATION_SPEED);
+			nav.turnTo(0, true);
 			
 		} else {
 			/*
@@ -144,7 +144,7 @@ public class USLocalizer {
 						actualAng = calcHeading(angleA,angleB) + odo.getAng();
 						// update the odometer position (example to follow:)
 						odo.setPosition(new double [] {0.0, 0.0, actualAng}, new boolean [] {true, true, true});
-						nav.setSpeeds(ROTATION_SPEED, ROTATION_SPEED);
+						//nav.setSpeeds(ROTATION_SPEED, ROTATION_SPEED);
 						nav.turnTo(0, true);
 		}
 	}
@@ -161,11 +161,12 @@ public class USLocalizer {
 		return distance;
 	}
 	
-private  void leftTurn(){
-		
+	private  void leftTurn(){
+	
 		nav.setSpeeds(-ROTATION_SPEED, ROTATION_SPEED);
 		
 	}
+
 	private  void rightTurn(){
 		
 		nav.setSpeeds(ROTATION_SPEED, -ROTATION_SPEED);
