@@ -109,7 +109,7 @@ public class USLocalizer {
 			// angles to the right of angleB is 45 degrees past 'north'
 						
 						
-			actualAng = calcHeading(angleA,angleB) + odo.getAng();
+			actualAng = calcHeading(angleB,angleA) + odo.getAng() -3.34;
 			// update the odometer position (example to follow:)
 			odo.setPosition(new double [] {0.0, 0.0, actualAng}, new boolean [] {true, true, true});
 			//nav.setSpeeds(ROTATION_SPEED, ROTATION_SPEED);
