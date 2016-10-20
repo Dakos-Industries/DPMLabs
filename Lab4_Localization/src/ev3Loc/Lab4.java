@@ -1,5 +1,6 @@
 package ev3Loc;
-
+// Spiros Mavroidakos 
+//David Ugo
 import lejos.hardware.*;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
