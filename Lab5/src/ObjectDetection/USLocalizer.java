@@ -7,7 +7,7 @@ import lejos.utility.Delay;
 
 public class USLocalizer {
 	public enum LocalizationType { FALLING_EDGE, RISING_EDGE };
-	public static float ROTATION_SPEED = 120;
+	public static float ROTATION_SPEED = 160;
 	
 	private static final int LEEWAY	= 33; // leeway in the reading of the US 
 
@@ -117,23 +117,24 @@ public class USLocalizer {
 			nav.turnTo(0, true);
 		}
 	}
-	public void finishLoc(){
+	public void finishLoc(){ // replaces the light sensor localization of the previous lab
 		
 		while(Button.waitForAnyPress() != Button.ID_ESCAPE){}
 		nav.turnTo(180,true);
 		
-		//Delay.msDelay(20000);
 		double xCurrent =  getFilteredData();
 		Delay.msDelay(1000);
 		
 		nav.turnTo(270, true);
-		//Delay.msDelay(20000);
 		double yCurrent =  getFilteredData();
 		
 		xCurrent =  (30.48 - xCurrent);
 		yCurrent = (30.49 - yCurrent);
 		Delay.msDelay(3000);
-		nav.travelTo(yCurrent, xCurrent);
+		nav.travelTo(xCurrent - 4, yCurrent - 4);
+		nav.turnTo(0,true);
+		odo.setPosition(new double [] {0, 0, 0}, new boolean [] {true, true, true});
+		nav.setSpeeds(0, 0);
 	}
 	
 	private float getFilteredData() { // filter the data 

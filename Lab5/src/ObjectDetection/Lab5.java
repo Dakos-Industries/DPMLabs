@@ -8,7 +8,7 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.*;
 import lejos.robotics.SampleProvider;
 
-public class Lab5 {
+public class Lab5  extends Thread{
 
 	// Static Resources:
 	// Left motor connected to output A
@@ -17,8 +17,10 @@ public class Lab5 {
 	// Color sensor port connected to input S2
 	private static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
 	private static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+	private static final EV3LargeRegulatedMotor topleftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+	private static final EV3LargeRegulatedMotor toprightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 	private static final Port usPort = LocalEV3.get().getPort("S1");		
-	private static final Port colorPort = LocalEV3.get().getPort("S2");		
+	private static final Port colorPort = LocalEV3.get().getPort("S2");	
 
 	
 	public static void main(String[] args) {
@@ -39,7 +41,8 @@ public class Lab5 {
 		// 3. Create a sample provider instance for the above and initialize operating mode
 		// 4. Create a buffer for the sensor data
 		SensorModes colorSensor = new EV3ColorSensor(colorPort);
-		SampleProvider colorValue = colorSensor.getMode("Red");			// colorValue provides samples from this instance
+		SampleProvider colorValue = colorSensor.getMode("RGB");			// colorValue provides samples from this instance
+
 		float[] colorData = new float[colorValue.sampleSize()];			// colorData is the buffer in which data are returned
 				
 		// setup the odometer and display
@@ -49,12 +52,14 @@ public class Lab5 {
 		// perform the ultrasonic localization
 		
 		USLocalizer usl = new USLocalizer(odo, usValue, usData, USLocalizer.LocalizationType.FALLING_EDGE);
-		usl.doLocalization();
+		//usl.doLocalization();
+		//usl.finishLoc();
 		
 		// perform the light sensor localization
-		LightLocalizer lsl = new LightLocalizer(odo, colorValue, colorData);
-		//lsl.doLocalization();			
-		usl.finishLoc();
+		lightObjectDetect lsl = new lightObjectDetect(odo, colorValue, colorData,topleftMotor,toprightMotor,usValue, usData);
+		lsl.objectDetect();
+		
+		
 		
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
 		System.exit(0);	
