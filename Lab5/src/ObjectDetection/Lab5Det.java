@@ -8,7 +8,7 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.*;
 import lejos.robotics.SampleProvider;
 
-public class Lab5  extends Thread{
+public class Lab5Det  {
 
 	// Static Resources:
 	// Left motor connected to output A
@@ -50,14 +50,22 @@ public class Lab5  extends Thread{
 		LCDInfo lcd = new LCDInfo(odo);
 		
 		// perform the ultrasonic localization
-		
 		USLocalizer usl = new USLocalizer(odo, usValue, usData, USLocalizer.LocalizationType.FALLING_EDGE);
-		//usl.doLocalization();
-		//usl.finishLoc();
+		lightObjectDetect2 lsl = new lightObjectDetect2(odo, colorValue, colorData,topleftMotor,toprightMotor,usValue, usData);
+		//System.out.println("Left for Detection, Right For Capture");
+		int buttonChoice = Button.waitForAnyPress();
+		if  (buttonChoice == Button.ID_LEFT){
+			lsl.floatDetection();
+		} else {
+			usl.doLocalization();
+			usl.finishLoc();
+			
+			// perform the light sensor localization
+			//lightObjectDetect lsl = new lightObjectDetect(odo, colorValue, colorData,topleftMotor,toprightMotor,usValue, usData);
+			lsl.objectDetect();
+		}
+			
 		
-		// perform the light sensor localization
-		lightObjectDetect lsl = new lightObjectDetect(odo, colorValue, colorData,topleftMotor,toprightMotor,usValue, usData);
-		lsl.objectDetect();
 		
 		
 		

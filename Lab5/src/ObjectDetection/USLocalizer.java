@@ -7,7 +7,7 @@ import lejos.utility.Delay;
 
 public class USLocalizer {
 	public enum LocalizationType { FALLING_EDGE, RISING_EDGE };
-	public static float ROTATION_SPEED = 160;
+	public static float ROTATION_SPEED = 120;
 	
 	private static final int LEEWAY	= 33; // leeway in the reading of the US 
 
@@ -43,7 +43,7 @@ public class USLocalizer {
 			}
 			angleA = odo.getAng(); // latch the angle
 			nav.setSpeeds(0, 0);//stop the robto
-			Delay.msDelay(1000);// avoid getting bad readings from the sensor
+			Delay.msDelay(2000);// avoid getting bad readings from the sensor
 			
 			// switch direction and wait until it sees no wall
 			while(getFilteredData() < LEEWAY){
@@ -63,7 +63,7 @@ public class USLocalizer {
 			// angles to the right of angleB is 45 degrees past 'north'
 			
 			
-			actualAng = calcHeading(angleA,angleB) + odo.getAng(); // get the actual angle of the robot
+			actualAng = calcHeading(angleA,angleB) + odo.getAng() + 15; // get the actual angle of the robot
 			// update the odometer position
 			odo.setPosition(new double [] {0.0, 0.0, actualAng}, new boolean [] {true, true, true});
 			nav.turnTo(0, true); // turn to 0
@@ -110,7 +110,7 @@ public class USLocalizer {
 			// angles to the right of angleB is 45 degrees past 'north'
 						
 						
-			actualAng = calcHeading(angleB,angleA) + odo.getAng();
+			actualAng = calcHeading(angleB,angleA) + odo.getAng() + 13;
 			// update the odometer position (example to follow:)
 			odo.setPosition(new double [] {0.0, 0.0, actualAng}, new boolean [] {true, true, true});
 			//nav.setSpeeds(ROTATION_SPEED, ROTATION_SPEED);
@@ -130,7 +130,7 @@ public class USLocalizer {
 		
 		xCurrent =  (30.48 - xCurrent);
 		yCurrent = (30.49 - yCurrent);
-		Delay.msDelay(3000);
+		Delay.msDelay(1000);
 		nav.travelTo(xCurrent - 4, yCurrent - 4);
 		nav.turnTo(0,true);
 		odo.setPosition(new double [] {0, 0, 0}, new boolean [] {true, true, true});
