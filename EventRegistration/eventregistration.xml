@@ -1,0 +1,57 @@
+<manager id="1">
+  <registrations id="2">
+    <registration id="3">
+      <id>1</id>
+      <participant id="4">
+        <name>re</name>
+      </participant>
+      <event id="5">
+        <name>uu</name>
+        <eventDate id="6">2016-09-07</eventDate>
+        <startTime id="7">15:34:00</startTime>
+        <endTime id="8">15:34:00</endTime>
+      </event>
+    </registration>
+    <registration id="9">
+      <id>1</id>
+      <participant id="10">
+        <name>lol</name>
+      </participant>
+      <event id="11">
+        <name>soccer</name>
+        <eventDate id="12">2016-08-31</eventDate>
+        <startTime id="13">18:15:16</startTime>
+        <endTime id="14">19:15:00</endTime>
+      </event>
+    </registration>
+  </registrations>
+  <participants id="15">
+    <participant reference="4"/>
+    <participant id="16">
+      <name>peter</name>
+    </participant>
+    <participant id="17">
+      <name>peter</name>
+    </participant>
+    <participant id="18">
+      <name>peter</name>
+    </participant>
+    <participant id="19">
+      <name>peter</name>
+    </participant>
+    <participant id="20">
+      <name>peter</name>
+    </participant>
+    <participant id="21">
+      <name>peter</name>
+    </participant>
+    <participant id="22">
+      <name>peter</name>
+    </participant>
+    <participant reference="10"/>
+  </participants>
+  <events id="23">
+    <event reference="5"/>
+    <event reference="11"/>
+  </events>
+</manager>
